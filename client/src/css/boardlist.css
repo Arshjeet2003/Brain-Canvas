@@ -1,0 +1,224 @@
+@import url('https://fonts.googleapis.com/css2?family=Atma:wght@300;400;500;600;700&display=swap');
+body {
+  background: #FAF7EE !important;
+  box-sizing: border-box;
+
+   font-family: "Atma", system-ui;
+  font-weight: 500;
+  font-style: normal;
+  /* font-style: normal !important; */
+}
+ .bodyOfBoardList{
+  overflow: hidden;
+} 
+
+.heading{
+  color: #EB6A42;
+}
+
+.heading2{
+  color: rgba(0, 0, 0, 0.523);
+}
+
+.section_our_solution .row {
+  align-items: center;
+}
+
+.main{
+  display: flex;
+  /* left: 20vh; */
+   
+  background: #FAF7EE !important;
+  scrollbar-width: none;
+    -ms-overflow-style: none; 
+}
+
+.main::-webkit-scrollbar {
+    display: none; 
+}
+
+/* .our_solution_category {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+} */
+/* .our_solution_category .solution_cards_box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+} */
+.solution_cards_box .solution_card {
+  flex: 0 50%;
+  /* background: #fff !important; */
+  box-shadow: 0 4px 8px 0 rgba(136, 144, 195, 0.2),
+    0 5px 15px 0 rgba(37, 44, 97, 0.15);
+  border-radius: 15px;
+  margin: 8px;
+  padding: 10px 15px;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  min-height: 205px;
+  margin-right: 10vh;
+  width: 85vh;
+  transition: 0.7s;
+  cursor: pointer;
+  border: 1px solid #EB6A42;
+}
+
+.solution_cards_box .solution_card:hover {
+  background: #EB6A42;
+  /* color: #fff; */
+  transform: scale(1.1);
+  z-index: 9;
+}
+
+.solution_cards_box .solution_card:hover::before {
+  background: rgb(85 108 214 / 10%);
+}
+
+.solution_cards_box .solution_card:hover .solu_title h3,
+.solution_cards_box .solution_card:hover .solu_description p {
+  color: #fff;
+}
+
+/* .solution_cards_box .solution_card:before {
+  content: "";
+  position: absolute;
+  background: rgb(85 108 214 / 5%);
+  width: 170px;
+  height: 200px;
+  z-index: -1;
+  transform: rotate(42deg);
+  right: -56px;
+  top: -23px;
+  border-radius: 35px;
+} */
+
+.solution_cards_box .solution_card:hover .solu_description button {
+  background: #fff !important;
+  color: #EB6A42;
+}
+
+.solution_card .so_top_icon {
+}
+
+.solution_card .solu_title h3 {
+  color: #212121;
+  font-size: 1.3rem;
+  margin-top: 13px;
+  margin-bottom: 13px;
+}
+
+.solution_card .solu_description p {
+  font-size: 15px;
+  margin-bottom: 15px;
+}
+
+.solution_card .solu_description button {
+  border: 0;
+  border-radius: 15px;
+  background: linear-gradient(
+    140deg,
+    #EB6A42 0%,
+    #EB6A42 50%,
+    #eb6a42c7 75%
+  ) !important;
+  color: #fff;
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 5px 16px;
+}
+
+.our_solution_content h1 {
+  text-transform: capitalize;
+  margin-bottom: 1rem;
+  font-size: 2.5rem;
+}
+.our_solution_content p {
+}
+
+.hover_color_bubble {
+  position: absolute;
+  background: rgb(54 81 207 / 15%);
+  width: 100rem;
+  height: 100rem;
+  left: 0;
+  right: 0;
+  z-index: -1;
+  top: 16rem;
+  border-radius: 50%;
+  transform: rotate(-36deg);
+  left: -18rem;
+  transition: 0.7s;
+}
+
+.solution_cards_box .solution_card:hover .hover_color_bubble {
+  top: 0rem;
+}
+
+.solution_cards_box .solution_card .so_top_icon {
+  width:30vh;
+  height: 30vh;
+  border-radius: 50%;
+  /* background: #fff; */
+  background: #FAF7EE !important;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.solution_cards_box .solution_card .so_top_icon img {
+  width: 30vh;
+  height: 30vh;
+  /* object-fit: contain; */
+}
+
+
+.main{
+  display: flex;
+  overflow: auto;
+  max-width: 220vh;
+  /* margin-left: 15.2vh; */
+}
+
+
+
+/*start media query*/
+@media screen and (min-width: 320px) {
+  .sol_card_top_3 {
+    position: relative;
+    top: 0;
+  }
+
+  .our_solution_category {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .our_solution_category .solution_cards_box {
+    flex: auto;
+  }
+}
+@media only screen and (min-width: 768px) {
+  .our_solution_category .solution_cards_box {
+    flex: 1;
+  }
+}
+@media only screen and (min-width: 1024px) {
+  .sol_card_top_3 {
+    position: relative;
+    top: -3rem;
+  }
+  .our_solution_category {
+    width: 85%;
+    margin: 0 auto;
+  }
+}
+
+.section_our_solution{
+  background: #FAF7EE !important;
+}
+
+
