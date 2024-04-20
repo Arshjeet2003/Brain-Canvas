@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+.inputIdHome{
+    width: 10vw;
+    height: 7vh;
+    border-radius: 0 30px 30px 0;
+    /* transform: translateY(1%); */
+}
+.leftRightInputHome{
+    margin-top: 7vh;
+}
+
+.ButtonToSubmitHome{
+    width: 7vw;
+
+}
+
+.ihavedevelopedthisclassonlytodisplayflex{
+    display: flex;
+}
+
+.titleHome{
+    color: #eb6a42;
+    
+}
+
+.titleHome h1{
+   font-weight: 700;
+   font-size: 10vh;
+   
+}
+
+.bottomBodyHome{
+    color:#778899;
+     font-family: "Inter", sans-serif;
+}
+
+.bodyTextHome{
+    color: #5B6A78;
+     font-family: "Inter", sans-serif;
+}
+.iconHome{
+    background-color: #E8E5DB;
+    color:#778899;
+    border-radius: 30px 0 0 30px;
+    margin-top: 0.7vh;
+    height: 7vh;
+    padding: 1vh;
+    padding-left: 1.2vw;
+    padding-top: 0vh;
+}
+.rightImageOfHomeImg{
+ width: 40vw;
+ margin-top: 9vh;
+}
