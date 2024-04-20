@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Atma:wght@300;400;500;600;700&display=swap');
+body {
+  background: #FAF7EE !important;
+  box-sizing: border-box;
+
+   font-family: "Atma", system-ui;
+  font-weight: 500;
+  font-style: normal;
+  /* font-style: normal !important; */
+}
+
+.headerOfChart{
+    color: #eb6a42;
+}
+
+.headerOfChart h1{
+    font-weight: 700;
+}
+
+.descriptionOfChart{
+    color: rgb(121, 117, 113);
+}
+
+
+
+.chartLeftButton button{
+    border-radius: 50px;
+    /* padding: 3vh; */
+}
+
+.rightChart{
+    
+    overflow-y: auto;
+    max-height: 110vh;
+    overflow-x: hidden;
+     scrollbar-width: none;
+     padding-bottom: 28vh;
+  -ms-overflow-style: none;
+  transition: background-color 0.5s ease;
+}
+.previewDisapper{
+background-color: #efb37a;
+transition: opacity 0.3s ease-in-out; 
+}
+
+.completeChart{
+    max-height: 100vh;
+    overflow: hidden;
+    padding-left: 4vw;
+   
+}
+
+.leftChart{
+    overflow-y: auto;
+    max-height: 100vh;
+    overflow-x: hidden;
+     scrollbar-width: none;
+     padding-bottom: 28vh;
+  -ms-overflow-style: none;
+}
+
