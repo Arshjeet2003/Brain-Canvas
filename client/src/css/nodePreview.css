@@ -1,0 +1,146 @@
+.titleNodePreview{
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-weight: 600;
+}
+
+.nodeId1{
+    color: #fff;
+    font-weight: 600;
+}
+
+.nodeDescriptio{
+    color: rgb(86, 79, 79);
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.ideaSpace_ideaSpaceHeading{
+    color: #fff;
+    font-weight: 600;
+    font-size: 2vh;
+}
+
+.ideaSpace_ideaSpaceHeading h3{
+    font-weight: 600;
+    font-size: 4vh;
+}
+
+.ideaTopic_nodePreview{
+   width: fit-content;
+   height: fit-content;
+   background-color: #decdc1;
+   border-radius: 30px;
+   /* padding: 1vh;
+   padding-top: 3vh;
+   margin: 2vh;
+   margin-left: 6vw; */
+   text-align: center;
+   justify-content: center;
+   align-items: center;
+}
+
+
+.constraintsNodePreview{
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+/* .percentage_nodePreview{
+    color: #fff;
+    font-weight: 600;
+    margin-left: 1vw;
+} */
+
+.progress_nodePreview{
+    width: fit-content;
+    height: fit-content;
+    /* color: rgb(86, 79, 79); */
+    padding: 1vh;
+    padding: 1vw;
+    padding-top: 4vh;
+    background-color: #dfbba1;
+    border-radius: 30px;
+}
+
+.githubnodePreview{
+    display: flex;
+    width: fit-content;
+    height: fit-content;
+    cursor: pointer;
+}
+
+.tagNodePreview{
+    transform: translate(5px,5px);
+}
+
+.previewHeader{
+    display: flex;
+}
+
+.closePreviewButton{
+    width: 3vh;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    background-color: #dfbba1 !important;
+    
+}
+
+
+
+
+
+.imag{
+    scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.imag img{
+   height: 27vh;
+   width: 14vw;
+}
+
+.image-container {
+  display: flex;
+  overflow-x: auto;
+  width: 100%;
+   scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.image-item {
+  flex: 0 0 auto;
+  max-width: 100%;
+  height: auto;
+  margin-right: 3vw; /* Optional: Add some spacing between images */
+  height: 27vh;
+   width: 14vw;
+}
+
+
+.classNameForImages{
+    color: #fff;
+    font-weight: 600;
+    font-size: 3.5vh;
+}
+
+.LinksNodePreview{
+     scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+
+.anchorTagNodePreview{
+    outline: none;
+}
+
+.fiveDotsNodePreview{
+    transform: translateX(-6%);
+    color: #6F8FAF;
+}
