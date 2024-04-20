@@ -1,0 +1,223 @@
+.ideaTempleteHeading {
+  color: #eb6a42;
+}
+
+.ideaTempleteHeading h1 {
+  font-weight: 700;
+}
+
+.ideaTempleteSection2,
+.ideaTempleteSection3 {
+  color: #eb6a42;
+  font-size: 2.9vh;
+}
+
+input,
+textarea {
+  outline: none;
+  border: none;
+  background-color: rgb(232, 229, 219);
+  border-radius: 2.5vh;
+}
+
+input {
+  width: 40vw;
+  height: 8vh;
+  font-size: 2.9vh;
+  padding: 10px;
+}
+
+textarea {
+  width: 40vw;
+  height: 8vh;
+  font-size: 2.9vh;
+  padding: 10px;
+}
+
+.leftTemplete {
+  margin: 20px;
+  margin-top: 10px;
+  /* overflow-y: auto;
+  overflow-x: hidden;
+  max-width: 50vw;
+  max-height: 99.9vh;
+  scrollbar-width: none;
+  -ms-overflow-style: none; */
+}
+
+.part2OfTemplete h3 {
+  color: #eb6a42;
+  font-weight: 600;
+}
+
+.ideaSpaceOfTemplete {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.ideaSpaceOfTemplete textarea {
+  width: 110vh;
+}
+
+button {
+  background: #fff !important;
+  color: #eb6a42;
+}
+
+button {
+  border: 0;
+  border-radius: 15px;
+  background: linear-gradient(
+    140deg,
+    #eb6a42 0%,
+    #eb6a42 50%,
+    #eb6a42c7 75%
+  ) !important;
+  color: #fff;
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 5px 16px;
+}
+
+.ideaSpaceTextArea {
+  padding-bottom: 10px;
+}
+
+.ideaSpaceOfTemplete textarea {
+  position: relative;
+  right: 2%;
+}
+
+.rightTemplete {
+  background-color: #efb37a;
+  left: 7%;
+  position: relative;
+  /* overflow: auto;
+  max-height: 99.9vh; */
+  /* scrollbar-width: none;
+  -ms-overflow-style: none; */
+}
+
+.inputForPreviousNodes {
+  width: 33.6vw;
+  margin-right: 20px;
+  overflow: auto;
+}
+
+.mainBodyOfTemplete {
+  overflow: hidden;
+}
+
+.rightElement {
+  color: rgb(86, 79, 79);
+}
+
+.progressRight {
+  display: flex;
+  margin-left: 2.5vw;
+  font-size: 2.9vh;
+  /* transform: translateY(-50%); */
+}
+
+.progressRight input {
+  width: 10vw;
+  background-color: #decdc1;
+}
+
+.progressRight label {
+  width: 7vw;
+  transform: translateY(22%);
+}
+
+.githubRight {
+  display: flex;
+  margin-left: 2vw;
+  font-size: 2.9vh;
+}
+
+.githubRight input {
+  width: 25vw;
+  margin-left: 0.5vw;
+  background-color: #decdc1;
+}
+
+.guidingPointsh3 {
+  /* margin-left: 2vw; */
+  color: rgb(88, 84, 84);
+}
+
+.textAreaforGuidingPoints textarea {
+  width: 35vw;
+  background-color: #decdc1;
+  
+}
+
+.guidingPointsDiv {
+  margin-left: 1vw;
+}
+
+.submitButtonForGuidingPoint {
+  transform: translateX(210%);
+}
+
+.submitButtonForAdditionalPoint {
+  transform: translateX(170%);
+}
+
+.labelForConstraints {
+    color: rgb(86, 79, 79);
+    font-size: 2.9vh;
+}
+
+.labelForConstraints input{
+     width: 10vw;
+     background-color: #decdc1;
+     margin-left: 1vw;
+}
+
+
+.tagsContainerForGuidingPoint{
+    background-color: #ecc5a0;
+    width: fit-content;
+    
+    margin-left: 1vw;
+    height: 10vh;
+    border-radius: 25px;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.savedPoints{
+    margin-top: 2.5vh;
+    margin-right: 1vw;
+}
+
+.tagsInputForIdeaPoint{
+    display: flex;
+}
+
+
+.addButtonLeft{
+    border-radius: 50px;
+    height: 8vh;
+}
+
+.ideaSpaceTextArea{
+    padding: 20px;
+}
+
+.part2OfTemplete{
+    width: auto;
+   word-wrap: break-word;
+}
+
+.mainBodyOfTemplete{
+    overflow: auto;
+  max-height: 99.9vh;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
