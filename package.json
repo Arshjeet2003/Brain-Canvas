@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "d3-force": "^3.0.0",
+    "dagre": "^0.8.5",
+    "react-d3-graph": "^2.6.0"
+  }
+}
