@@ -46,8 +46,58 @@ const ChartProvider = ({ children }) => {
     return json.data._id;
   };
 
+  // Fetch an Idea using Id
+  const fetchIdeaUsingId = async (linkId, boardId, chartId, ideaId) => {
+    const url = `http://localhost:8000/${linkId}/board/${boardId}/charts/${chartId}/idea/${ideaId}`;
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
+
+    const json = await response.json();
+    if (!json) {
+      console.log("Link not created");
+      return {};
+    }
+    return json;
+  };
+
+  // Update Idea using Id
+  const updateIdea = async (linkId, boardId, chartId, ideaId, updatedIdea) => {
+    const url = `http://localhost:8000/${linkId}/board/${boardId}/charts/${chartId}/idea/${ideaId}/updateidea`;
+
+    const response = await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": localStorage.getItem("token"),
+      },
+      body : JSON.stringify(updatedIdea),
+    });
+
+    const json = await response.json();
+    console.log(json);
+    if (!json) {
+      console.log("Link not created");
+      return {};
+    }
+    return json;
+  };
+
   return (
-    <ChartContext.Provider value={{ chart, fetchChartById, createNewIdea }}>
+    <ChartContext.Provider
+      value={{
+        chart,
+        fetchChartById,
+        createNewIdea,
+        fetchIdeaUsingId,
+        updateIdea,
+      }}
+    >
       {children}
     </ChartContext.Provider>
   );
