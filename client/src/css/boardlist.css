@@ -161,6 +161,7 @@ body {
   width:30vh;
   height: 30vh;
   border-radius: 50%;
+  border: 1px solid #6C63FF;
   /* background: #fff; */
   background: #FAF7EE !important;
   overflow: hidden;
@@ -170,8 +171,8 @@ body {
 }
 
 .solution_cards_box .solution_card .so_top_icon img {
-  width: 30vh;
-  height: 30vh;
+  width: 25vh;
+  height: 25vh;
   /* object-fit: contain; */
 }
 
@@ -221,4 +222,24 @@ body {
   background: #FAF7EE !important;
 }
 
+.inputBoardList{
+  width: 30vw;
+}
 
+.titleInputBoardList{
+  color: #EB6A42;
+  font-weight: 600;
+  font-size: 3vh;
+}
+
+.biggestTitle{
+  padding-left: 8.8vw;
+}
+
+.textareaBl{
+  height: 14vh;
+}
+
+/* .biggestButton{
+  pad
+} */

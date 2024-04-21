@@ -80,6 +80,7 @@
 
 .previewHeader{
     display: flex;
+    text-align: center;
 }
 
 .closePreviewButton{
@@ -99,11 +100,16 @@
 .imag{
     scrollbar-width: none;
   -ms-overflow-style: none;
+  background-color: #decdc1;
+  padding: 2vh;
+  border-radius: 10px;
 }
 
 .imag img{
    height: 27vh;
    width: 14vw;
+   box-shadow: rgb(86, 79, 79) 0px 6px 16px;
+   border: 3px solid #eb6a42;
 }
 
 .image-container {
@@ -142,5 +148,5 @@
 
 .fiveDotsNodePreview{
     transform: translateX(-6%);
-    color: #6F8FAF;
+    color: #002D62;
 }

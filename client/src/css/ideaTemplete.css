@@ -221,3 +221,106 @@ button {
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
+
+.vnfdbvjbvdsh{
+   background-color: #decdc1 !important;
+}
+
+.fileInputIdeaTemplete{
+   margin-right: 2vw;
+   width: 20vw;
+   margin-bottom: 2vh;
+}
+
+.preStoredImagesIdeaTemplete{
+  background-color: #decdc1;
+  width: fit-content;
+  height: fit-content;
+  padding: 1vh;
+}
+
+.PreStoredGraphIdeaTemplete{
+   background-color: #decdc1;
+  width: 50vw;
+  height: fit-content;
+  /* padding: 1vh; */
+  border-radius: 30px;
+  max-width: 200vw;
+  overflow-x: auto;
+  display: flex;
+   scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-left: 2vw;
+  /* padding-bottom: 4vh;
+  padding-top: 0; */
+  
+}
+
+.PreStoredGraphIdeaTemplete img{
+  margin-top: 6vh;
+  box-shadow: rgb(86, 79, 79) 0px 6px 16px;
+   border: 3px solid #eb6a42;
+   height: 15vh !important;
+}
+
+.titleLeftIdeaTemplete{
+  font-weight: 600;
+}
+
+.mainBodyOfTemplete{
+  overflow-x: hidden;
+}
+
+.preStoredIdeaIdeaTemplete{
+    background-color: #decdc1;
+  width: fit-content;
+  height: fit-content;
+  /* padding: 1vh; */
+  border-radius: 30px;
+  max-width: 100vw;
+  overflow-x: auto;
+  /* display: flex; */
+   scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-left: 2vw;
+  padding-right: 2vw;
+  /* padding-bottom: 1vh; */
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  font-size: 3.5vh;
+  /* word-wrap: break-word; */
+  /* padding: 1vh ; */
+  /* padding-top: 0vh; */
+}
+
+
+.textforStoredText{
+  transform: translateY(30%);
+  /* word-wrap: break-word; */
+
+  /* margin: 1vh; */
+
+}
+
+.imgOfBoard{
+  transform: translateY(-17%);
+}
+
+/* .thisisNamanSinghHere{
+  max-width: 10vw;
+
+} */
+
+/*  */
+
+/* #graph-id-graph-wrapper svg{
+  width: 100vw !important;
+  height: 75vh !important;
+  padding-left: 25vw;
+  
+} */
+/* 
+#graph-id-graph-wrapper{
+  transform: translateX(-8%);
+} */

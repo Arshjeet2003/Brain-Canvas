@@ -16,6 +16,10 @@ body {
   color: #EB6A42;
 }
 
+.biggestTitle{
+  padding-left: 8.8vw;
+}
+
 .heading2{
   color: rgba(0, 0, 0, 0.523);
 }
@@ -23,14 +27,21 @@ body {
 .first .row {
   align-items: center;
 }
+.inputBoardList{
+  width: 30vw;
+}
+
+.textareaBl{
+  height: 14vh;
+}
 
 .chart-list {
   display: flex;
   /* left: 20vh; */
   background: #FAF7EE !important;
-  text-align: center;
-  justify-content: center;
-  align-items: center;
+  /* text-align: center; */
+  /* justify-content: center; */
+  /* align-items: center; */
   scrollbar-width: none;
   padding-top: 5vh;
   padding-bottom: 5vh;
@@ -68,9 +79,10 @@ body {
   position: relative;
   z-index: 1;
   overflow: hidden;
-  min-height: 55vh;
+  min-height: 5vh;
   margin-right: 10vh;
   width: 45vh;
+  height: 50vh;
   transition: 0.7s;
   cursor: pointer;
   border: 1px solid #EB6A42;
@@ -190,7 +202,7 @@ body {
   display: flex;
   overflow: auto;
   max-width: 220vh;
-  padding-left: 80vh;
+  /* padding-left: 80vh; */
   /* margin-left: 15.2vh; */
 }
 
@@ -236,4 +248,11 @@ body {
   background: #FAF7EE !important;
 }
 
+.bodyOfBoard{
+  overflow: hidden;
+  max-height: 100vh;
+}
 
+.borderborder{
+  border: 1px solid #6c63ff
+}

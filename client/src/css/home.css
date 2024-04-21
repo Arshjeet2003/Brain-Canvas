@@ -7,7 +7,7 @@
     /* transform: translateY(1%); */
 }
 .leftRightInputHome{
-    margin-top: 7vh;
+    margin-top: 15vh;
 }
 
 .ButtonToSubmitHome{
@@ -17,6 +17,7 @@
 
 .ihavedevelopedthisclassonlytodisplayflex{
     display: flex;
+    margin-top: 7vh;
 }
 
 .titleHome{
