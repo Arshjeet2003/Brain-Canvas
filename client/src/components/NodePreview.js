@@ -38,7 +38,7 @@ const NodePreview = ({ idea, nodeId, onClose }) => {
         </div>
       </div>
 
-      <div className="conatiner">
+      <div className="container">
         {idea.idea_space.map((node, nodeIndex) => (
           <div key={nodeIndex} className="secondPartOfNodePreview">
             {/* <h3>Idea Space - Node {nodeIndex + 1}</h3> */}
@@ -72,7 +72,7 @@ const NodePreview = ({ idea, nodeId, onClose }) => {
               <p className="classNameForImages">Boards</p>
             </div>
             {node.freeboard && node.freeboard.length > 0 && (
-              <div className="image-container mt-1">
+              <div className="image-container imag mt-1">
                 {node.freeboard.map((link, index) => (
                   <img
                     key={index}
@@ -87,7 +87,7 @@ const NodePreview = ({ idea, nodeId, onClose }) => {
               <p className="classNameForImages">Graphs</p>
             </div>
             {node.graphs && node.graphs.length > 0 && (
-              <div className="image-container mt-1">
+              <div className="image-container imag mt-1">
                 {node.graphs.map((graph, index) => (
                   <img
                     key={index}
@@ -127,7 +127,7 @@ const NodePreview = ({ idea, nodeId, onClose }) => {
                           display: "block",
                           marginBottom: "2vh",
                           // textDecoration: "none",
-                          color: "#6F8FAF",
+                          color: "#002D62",
                           height: "4vh",
                           overflow: "hidden",
                         }}
@@ -183,7 +183,7 @@ const NodePreview = ({ idea, nodeId, onClose }) => {
             <p className="classNameForImages">Boards</p>
           </div>
           {node.freeboard && node.freeboard.length > 0 && (
-            <div className="image-container mt-1">
+            <div className="image-container imag mt-1">
               {node.freeboard.map((link, index) => (
                 <img
                   key={index}
@@ -198,7 +198,7 @@ const NodePreview = ({ idea, nodeId, onClose }) => {
             <p className="classNameForImages">Graphs</p>
           </div>
           {node.graphs && node.graphs.length > 0 && (
-            <div className="image-container mt-1">
+            <div className="image-container imag mt-1">
               {node.graphs.map((graph, index) => (
                 <img
                   key={index}
@@ -237,7 +237,7 @@ const NodePreview = ({ idea, nodeId, onClose }) => {
                           display: "block",
                           marginBottom: "2vh",
                           // textDecoration: "none",
-                          color: "#6F8FAF",
+                          color: "#002D62",
                           height: "4vh",
                           overflow: "hidden",
                         }}
