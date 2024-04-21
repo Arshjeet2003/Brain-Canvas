@@ -21,6 +21,8 @@ export const Chart = () => {
 
   const [chartData, setChartData] = useState({})
 
+  const [ideaLoaded, setIdeaLoaded] = useState(false)
+
   const navigate = useNavigate();
 
   const [graphData, setGraphData] = useState({
@@ -124,188 +126,8 @@ export const Chart = () => {
 
   const [ideas, setIdeas] = useState([])
 
-//   const [ideas, setIdeas] = useState([{
-//     topic: "Mobile App for Task Management",
-//     description:
-//       "Developing a mobile application for efficient task management and productivity enhancement.",
-//     idea_space: [
-//       {
-//         text: "Brainstorming ideas for user interface design",
-//         images: [
-//           "https://example.com/ui_design.png",
-//           "https://www.google.com",
-//         ],
-//         freeboard: ["https://example.com/user_friendly_ui"],
-//         graphs: ["https://example.com/graph1"],
-//         links: ["https://example.com/link1"],
-//       },
-//       {
-//         text: "Researching competitor apps",
-//         images: ["https://example.com/competitor_analysis.png"],
-//         freeboard: ["https://example.com/key_features"],
-//         graphs: ["https://example.com/graph2"],
-//         links: ["https://example.com/link2"],
-//       },
-//     ],
-//     inspiration: [
-//       {
-//         text: "Inspiration from successful task management apps like Todoist and Trello",
-//         images: [],
-//         freeboard: ["https://example.com/user_feedback"],
-//         graphs: [],
-//         links: ["https://example.com/inspiration_link1"],
-//       },
-//       {
-//         text: "Innovative task visualization techniques",
-//         images: ["https://example.com/innovative_visualization.png"],
-//         freeboard: [],
-//         graphs: ["https://example.com/graph3"],
-//         links: ["https://example.com/inspiration_link2"],
-//       },
-//     ],
-//     cons: {
-//       time: "Requires dedicated development time",
-//       budget: "Initial investment for development and maintenance",
-//     },
-//     progress:
-//       "Currently in the design phase, preparing for development sprint",
-//     github_link: "https://github.com/username/task-management-app",
-//     guiding: ["https://example.com/guiding1", "https://example.com/guiding2"],
-//     comments: {
-//       user1: "https://example.com/comment1",
-//       user2: "https://example.com/comment2",
-//     },
-//     likes: 4,
-//     additional_points: [
-//       "https://example.com/additional_point1",
-//       "https://example.com/additional_point2",
-//     ],
-//     prevNodes: [],
-//   },
-//   {
-//     topic: "Mobile App for Task Management2",
-//     description:
-//       "Developing a mobile application for efficient task management and productivity enhancement.",
-//     idea_space: [
-//       {
-//         text: "Brainstorming ideas for user interface design",
-//         images: [
-//           "https://example.com/ui_design.png",
-//           "https://www.google.com",
-//         ],
-//         freeboard: ["https://example.com/user_friendly_ui"],
-//         graphs: ["https://example.com/graph1"],
-//         links: ["https://example.com/link1"],
-//       },
-//       {
-//         text: "Researching competitor apps",
-//         images: ["https://example.com/competitor_analysis.png"],
-//         freeboard: ["https://example.com/key_features"],
-//         graphs: ["https://example.com/graph2"],
-//         links: ["https://example.com/link2"],
-//       },
-//     ],
-//     inspiration: [
-//       {
-//         text: "Inspiration from successful task management apps like Todoist and Trello",
-//         images: [],
-//         freeboard: ["https://example.com/user_feedback"],
-//         graphs: [],
-//         links: ["https://example.com/inspiration_link1"],
-//       },
-//       {
-//         text: "Innovative task visualization techniques",
-//         images: ["https://example.com/innovative_visualization.png"],
-//         freeboard: [],
-//         graphs: ["https://example.com/graph3"],
-//         links: ["https://example.com/inspiration_link2"],
-//       },
-//     ],
-//     cons: {
-//       time: "Requires dedicated development time",
-//       budget: "Initial investment for development and maintenance",
-//     },
-//     progress:
-//       "Currently in the design phase, preparing for development sprint",
-//     github_link: "https://github.com/username/task-management-app",
-//     guiding: ["https://example.com/guiding1", "https://example.com/guiding2"],
-//     comments: {
-//       user1: "https://example.com/comment1",
-//       user2: "https://example.com/comment2",
-//     },
-//     likes: 8,
-//     additional_points: [
-//       "https://example.com/additional_point1",
-//       "https://example.com/additional_point2",
-//     ],
-//     prevNodes: ["Mobile App for Task Management"],
-//   },
-//   {
-//     topic: "Mobile App for Task Management3",
-//     description:
-//       "Developing a mobile application for efficient task management and productivity enhancement.",
-//     idea_space: [
-//       {
-//         text: "Brainstorming ideas for user interface design",
-//         images: [
-//           "https://example.com/ui_design.png",
-//           "https://www.google.com",
-//         ],
-//         freeboard: ["https://example.com/user_friendly_ui"],
-//         graphs: ["https://example.com/graph1"],
-//         links: ["https://example.com/link1"],
-//       },
-//       {
-//         text: "Researching competitor apps",
-//         images: ["https://example.com/competitor_analysis.png"],
-//         freeboard: ["https://example.com/key_features"],
-//         graphs: ["https://example.com/graph2"],
-//         links: ["https://example.com/link2"],
-//       },
-//     ],
-//     inspiration: [
-//       {
-//         text: "Inspiration from successful task management apps like Todoist and Trello",
-//         images: [],
-//         freeboard: ["https://example.com/user_feedback"],
-//         graphs: [],
-//         links: ["https://example.com/inspiration_link1"],
-//       },
-//       {
-//         text: "Innovative task visualization techniques",
-//         images: ["https://example.com/innovative_visualization.png"],
-//         freeboard: [],
-//         graphs: ["https://example.com/graph3"],
-//         links: ["https://example.com/inspiration_link2"],
-//       },
-//     ],
-//     cons: {
-//       time: "Requires dedicated development time",
-//       budget: "Initial investment for development and maintenance",
-//     },
-//     progress:
-//       "Currently in the design phase, preparing for development sprint",
-//     github_link: "https://github.com/username/task-management-app",
-//     guiding: ["https://example.com/guiding1", "https://example.com/guiding2"],
-//     comments: {
-//       user1: "https://example.com/comment1",
-//       user2: "https://example.com/comment2",
-//     },
-//     likes: 12,
-//     additional_points: [
-//       "https://example.com/additional_point1",
-//       "https://example.com/additional_point2",
-//     ],
-//     prevNodes: [
-//       "Mobile App for Task Management",
-//       "Mobile App for Task Management2",
-//     ],
-//   },
-// ])
-  // const [ideas, setIdeas] = useState([])
-
-  // const [idea, setIdea] = useState({});
   const [likedIdeas, setLikedIdeas] = useState({});
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -314,17 +136,11 @@ export const Chart = () => {
         const chartIdeas = await response.data.ideas;
         setChartData(response.data)
         setIdeas(chartIdeas);
+        setIdeaLoaded(true)
       } catch (error) {
         console.error("Error fetching data:", error);
       }
-    };
-    fetchData();
-  }, [boardId, linkId, chartId]);
-
-
-  useEffect(() => {
-    const fetchData = async () => {
-      console.log(ideas)
+      // console.log(ideas)
       setGraphData({ nodes: [], links: [] });
       try {
         const adjacencyList = {};
@@ -332,7 +148,7 @@ export const Chart = () => {
         // Populate the adjacency list
         ideas.forEach((ideaVal) => {
           adjacencyList[ideaVal.topic] = [];
-          if (ideaVal.prevNodes && ideaVal.prevNodes.length == 0) {
+          if (ideaVal.prevNodes.length == 0) {
             const maxLikes = 20;
             const darknessFactor = Math.min(ideaVal.likes / maxLikes, 1);
             const darkenedColor = darkenColor(color, darknessFactor);
@@ -392,11 +208,12 @@ export const Chart = () => {
           nodes: [...prevState.nodes, ...childNodesToAdd],
           links: [...prevState.links, ...linksToAdd],
         }));
+        console.log(graphData)
       }
     };
 
     fetchData();
-  }, [ideas, setIdeas]);
+  }, [boardId, linkId, chartId, ideaLoaded]);
 
   // // State variable to track the clicked node's ID
   const [clickedNode, setClickedNode] = useState(null);
@@ -481,7 +298,8 @@ export const Chart = () => {
   };
 
   const onClickNode = (ideaId) => {
-    navigate(`/${linkId}/board/${boardId}/charts/${chartId}/idea/${ideaId}`);
+    const childIdea = ideas.find((idea) => idea.topic === ideaId);
+    navigate(`/${linkId}/board/${boardId}/charts/${chartId}/idea/${childIdea._id}`);
   };
 
   // Function to close the preview
@@ -501,8 +319,7 @@ export const Chart = () => {
 
   return (
     <>
-    <button onClick={handleAddIdea}> Add a new Idea </button>
-      <div className="container-fluid completeChart">
+    <div className="container-fluid completeChart">
         <div className="row headerOfChart mt-2">
           <h1>
             <strong>{chartData.title}</strong>
@@ -511,30 +328,21 @@ export const Chart = () => {
         <div className="row descriptionOfChart">
           <p>{chartData.description}</p>
         </div>
-        <div className="row">
+        <div className="row mt-3 LowerChart">
           <div className="col-7">
-            <div className="row">
-              <div className="col-8 ">
-                <input
-                  type="text"
-                  value={parent}
-                  onChange={(e) => setParent(e.target.value)}
-                  placeholder="Enter parent node"
-                  className="form-control"
-                />
-                <input
-                  type="text"
-                  value={child}
-                  onChange={(e) => setChild(e.target.value)}
-                  placeholder="Enter child node"
-                  className="form-control"
-                />
+            <div className="row mt-5">
+              <div className="col-8">
+                <button onClick={handleAddIdea}> Add a new Idea </button>
               </div>
-              <div className="col-4 chartLeftButton">
+              <div
+                className="col-4 chartLeftButton"
+                style={{ background: "#FAF7EE !important" }}
+              >
                 {" "}
                 <button
                   onClick={increaseNodeSize}
-                  className="btn btn-secondary "
+                  className="btn btn-secondary plusMinus"
+                  style={{ background: "#FAF7EE !important" }}
                 >
                   <FontAwesomeIcon icon={faPlus} />
                 </button>
@@ -542,7 +350,10 @@ export const Chart = () => {
                   onClick={decreaseNodeSize}
                   className="btn btn-secondary mx-3"
                 >
-                  <FontAwesomeIcon icon={faMinus} />
+                  <FontAwesomeIcon
+                    icon={faMinus}
+                    
+                  />
                 </button>
               </div>
             </div>
@@ -550,36 +361,40 @@ export const Chart = () => {
               <div className="col">
                 <div className="graph-container">
                   <Graph
-            id="graph-id"
-            data={graphData}
-            onMouseOverNode={onHoverNode}
-            onClickNode={(nodeId) => onDoubleClickNode(nodeId)}
-            onDoubleClickNode={(nodeId) => onClickNode(nodeId)}
-            config={{
-              directed: true,
-              node: {
-                symbolType: "circle",
-                size: nodeSize,
-              },
-              link: {
-                highlightColor: "lightblue",
-              },
-              d3: {
-                gravity: -400, // Increase this value to increase the distance between nodes
-              },
-            }}
-            onEngine={(graph) => {
-              const layout = dagre.graphlib.layout();
-              layout(graph);
-            }}
-          />
+                    id="graph-id"
+                    data={graphData}
+                    onMouseOverNode={onHoverNode}
+                    onClickNode={(nodeId) => onDoubleClickNode(nodeId)}
+                    onDoubleClickNode={(nodeId) => onClickNode(nodeId)}
+                    config={{
+                      directed: true,
+                      node: {
+                        symbolType: "circle",
+                        size: nodeSize,
+                        labelOffset: 2,
+                        fontSize: 16,
+                      },
+                      link: {
+                        highlightColor: "lightblue",
+                        color: "#333", // Darker color for the links
+                        strokeWidth: 2, 
+                      },
+                      d3: {
+                        gravity: -400,
+                      },
+                    }}
+                    onEngine={(graph) => {
+                      const layout = dagre.graphlib.layout();
+                      layout(graph);
+                    }}
+                  />
 
                   {/* Render the preview component if a node is clicked */}
                 </div>
               </div>
             </div>
           </div>
-          <div className="col-5 rightChart">
+          <div className="col-5  rightChart">
             <div className="row">
               {clickedNode && (
                 <div className="previewDisapper">
