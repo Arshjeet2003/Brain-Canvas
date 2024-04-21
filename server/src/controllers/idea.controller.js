@@ -66,17 +66,17 @@ const createIdea = asyncHandler(async (req, res) => {
   // }
 
   // Check if parent ideas exist, if provided
-  if (prevNodes) {
-    for (const prevNodeId of prevNodes) {
-      const prevNode = await Idea.findById(prevNodeId);
-      if (!prevNode) {
-        throw new ApiError(
-          404,
-          `Previous idea with ID ${prevNodeId} not found`
-        );
-      }
-    }
-  }
+  // if (prevNodes) {
+  //   for (const prevNodeId of prevNodes) {
+  //     const prevNode = await Idea.findById(prevNodeId);
+  //     if (!prevNode) {
+  //       throw new ApiError(
+  //         404,
+  //         `Previous idea with ID ${prevNodeId} not found`
+  //       );
+  //     }
+  //   }
+  // }
 
   // Create a new idea instance
   const idea = new Idea({

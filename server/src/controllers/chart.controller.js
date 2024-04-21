@@ -66,7 +66,7 @@ const createChart = asyncHandler(async (req, res) => {
   // Return success response with created chart details
   return res
     .status(201)
-    .json(new ApiResponse(200, createdChart, "Chart created successfully"));
+    .json(new ApiResponse(200, createdChart, "Chart created successfully", ""));
 });
 
 const getChartById = asyncHandler(async (req, res) => {
@@ -107,9 +107,19 @@ const getChartById = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Chart not found");
   }
 
+  const ideas = [];
+  for (const ideaId of chart.ideas) {
+    const idea = await Idea.findById(ideaId);
+    if (idea) {
+      ideas.push(idea);
+    }
+  }
+
+  chart.ideas = ideas;
+
   res
     .status(200)
-    .json(new ApiResponse(200, chart, "Chart fetched successfully..."));
+    .json(new ApiResponse(200, chart, "", "Chart fetched successfully..."));
 });
 
 export { getChartById, createChart };
