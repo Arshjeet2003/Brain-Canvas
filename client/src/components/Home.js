@@ -12,6 +12,13 @@ export const Home = (props) => {
 
   const history = useNavigate();
 
+  useEffect(() => {
+    if (!localStorage.getItem("token")) {
+      history("/login");
+    }
+    // eslint-disable-next-line
+  }, []);
+
   // handle when link is created and then join link
   const handleCreateLink = async (e) => {
     // creating a new link
@@ -50,7 +57,7 @@ export const Home = (props) => {
               <h3 className="bottomBodyHome">Painting Ideas into Reality.</h3>
             </div>
             <div className="row">
-              <div className="col-3">
+              <div className="col-3 mt-4">
                 <div className="mt-5">
                   <button onClick={handleCreateLink}>Create New Link</button>
                 </div>
@@ -70,7 +77,7 @@ export const Home = (props) => {
                       id="linkId"
                       name="linkId"
                     />
-                    <div className="mx-2">
+                    <div className="mx-2 mt-2">
                       <button className="ButtonToSubmitHome mt-2" type="submit">
                         Join Link
                       </button>

@@ -38,6 +38,16 @@ export default function Signup() {
 
   return (
     <div>
+      <div className="position-fixed top-0 end-0 p-3">
+        <button
+          className="btn btn-primary"
+          onClick={() => {
+            history("/login");
+          }}
+        >
+          Login
+        </button>
+      </div>
       <div>
         <h2> Create an account to using our website </h2>
       </div>

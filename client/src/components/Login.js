@@ -45,6 +45,11 @@ export default function Login() {
 
   return (
     <div className="container my-3">
+      <div className="position-fixed top-0 end-0 p-3">
+        <button className="btn btn-primary" onClick={()=>{history('/signup')}}>
+          Sign Up
+        </button>
+      </div>
       <div className="container my-3">
         <h2> Login to continue to iNotebook </h2>
       </div>

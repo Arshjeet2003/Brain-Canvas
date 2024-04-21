@@ -1,25 +1,33 @@
 import React, { useState, useEffect, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTrash,
+  faPlus,
+  faImage,
+  faLink,
+  faChessBoard,
+  faDiagramProject,
+} from "@fortawesome/free-solid-svg-icons";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/ideaTemplete.css";
 import ChartContext from "../context/charts/ChartContext.js";
 import { useParams, useNavigate } from "react-router-dom";
+import { Graph } from "react-d3-graph";
+import dagre from "dagre";
 
 export const IdeaTemplate = () => {
-  const { createNewIdea } = useContext(ChartContext);
-  const { linkId, boardId, chartId } = useParams();
+  const { linkId, boardId, chartId, ideaId } = useParams();
   const navigate = useNavigate();
+  const { chart, fetchChartById, createNewIdea, updateIdea } = useContext(ChartContext);
+
+  const [ideas, setIdeas] = useState([]);
+  const [ideaLoaded, setIdeaLoaded] = useState(false);
 
   const [idea, setIdea] = useState({
     topic: "",
     description: "",
-    idea_space: [
-      { text: "", images: [], freeboard: [], graphs: [], links: [] },
-    ],
-    inspiration: [
-      { text: "", images: [], freeboard: [], graphs: [], links: [] },
-    ],
+    idea_space: [{ text: "", images: [], board: [], graphs: [], links: [] }],
+    inspiration: [{ text: "", images: [], board: [], graphs: [], links: [] }],
     cons: { time: "", budget: "" },
     progress: "",
     github_link: "",
@@ -38,17 +46,172 @@ export const IdeaTemplate = () => {
     text: "",
     links: [],
     images: [],
-    boards: [],
+    board: [],
     graphs: [],
   });
 
   const [tempInspiration, setTempInspiration] = useState({
     text: "",
     images: [],
-    boards: [],
+    board: [],
     graphs: [],
     links: [],
   });
+
+  const [graphData, setGraphData] = useState({
+    nodes: [],
+    links: [],
+  });
+
+  const [color, setColor] = useState("#E97451");
+
+  const [chartData, setChartData] = useState({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetchChartById(linkId, boardId, chartId);
+        const chartIdeas = await response.data.ideas;
+        setChartData(response.data);
+        setIdeas(chartIdeas);
+        console.log(chartIdeas)
+        if(ideaId !== undefined){
+          const childIdea = chartIdeas.find((idea) => idea._id === ideaId);
+          if(childIdea!==undefined)
+            setIdea(childIdea);
+        }
+        setIdeaLoaded(true);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+      // console.log(ideas)
+      setGraphData({ nodes: [], links: [] });
+      try {
+        const adjacencyList = {};
+
+        // Populate the adjacency list
+        ideas.length && ideas.forEach((ideaVal) => {
+          adjacencyList[ideaVal.topic] = [];
+          if (ideaVal.prevNodes.length == 0) {
+            const maxLikes = 20;
+            const darknessFactor = Math.min(ideaVal.likes / maxLikes, 1);
+            const darkenedColor = darkenColor(color, darknessFactor);
+            setGraphData((prevState) => ({
+              ...prevState,
+              nodes: [
+                ...prevState.nodes,
+                { id: ideaVal.topic, color: darkenedColor, x: 100, y: 250 },
+              ],
+            }));
+          }
+          ideaVal.prevNodes.length > 0 &&
+            ideaVal.prevNodes.forEach((child) => {
+              adjacencyList[child].push(ideaVal.topic);
+            });
+        });
+
+        // Traverse the keys of the adjacency list and add child nodes and create links
+        Object.keys(adjacencyList).forEach((parent) => {
+          addChildNodesAndCreateLinks(parent, adjacencyList[parent]);
+        });
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    const rgbToHex = (r, g, b) => {
+      return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+    };
+
+    const hexToRgb = (color) => {
+      const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+      const hexColor = color.replace(shorthandRegex, (m, r, g, b) => {
+        return r + r + g + g + b + b;
+      });
+      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hexColor);
+      return result
+        ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16),
+          }
+        : null;
+    };
+
+    // Function to darken a color based on a darkness factor
+    const darkenColor = (color, darknessFactor) => {
+      // Convert the color to RGB format
+      const rgbColor = hexToRgb(color);
+
+      // Darken each RGB component based on the darkness factor
+      const darkenedR = Math.round(rgbColor.r * (1 - darknessFactor));
+      const darkenedG = Math.round(rgbColor.g * (1 - darknessFactor));
+      const darkenedB = Math.round(rgbColor.b * (1 - darknessFactor));
+
+      // Convert the darkened RGB components back to hex format
+      const darkenedHexColor = rgbToHex(darkenedR, darkenedG, darkenedB);
+
+      return darkenedHexColor;
+    };
+
+    const addChildNodesAndCreateLinks = (parent, children) => {
+      const childNodesToAdd = [];
+      const linksToAdd = [];
+
+      children.forEach((childId) => {
+        // Find the child idea in the ideas array
+        const childIdea = ideas.find((idea) => idea.topic === childId);
+
+        if (!graphData.nodes.some((node) => node.id === childId) && childIdea) {
+          // Calculate the color based on the number of likes
+          const maxLikes = 20;
+          const darknessFactor = Math.min(childIdea.likes / maxLikes, 1);
+          const darkenedColor = darkenColor(color, darknessFactor);
+
+          const childNode = { id: childId, color: darkenedColor, x: 0, y: 250 }; // Adjust y position as needed
+          childNodesToAdd.push(childNode);
+        }
+
+        const linkExists = graphData.links.some(
+          (link) => link.source === parent && link.target === childId
+        );
+        if (!linkExists) {
+          linksToAdd.push({ source: parent, target: childId });
+        }
+      });
+
+      if (childNodesToAdd.length > 0 || linksToAdd.length > 0) {
+        setGraphData((prevState) => ({
+          ...prevState,
+          nodes: [...prevState.nodes, ...childNodesToAdd],
+          links: [...prevState.links, ...linksToAdd],
+        }));
+        console.log(graphData);
+      }
+    };
+
+    fetchData();
+  }, [boardId, linkId, chartId, ideaLoaded]);
+
+  const [clickedNode, setClickedNode] = useState(null);
+
+  const onClickNode = (ideaId2) => {
+    // Find the child idea corresponding to the clicked node
+    const childIdea = ideas.find((idea) => idea.topic === ideaId2);
+  
+    if (childIdea) {
+      // Create a copy of the child idea to avoid mutating the original state
+      const updatedIdea = { ...idea };
+  
+      // Update the parents array of the child idea to include the ID of the clicked node
+      updatedIdea.prevNodes = [...updatedIdea.prevNodes, childIdea.topic];
+  
+      // Update the state with the modified child idea
+      setIdea(updatedIdea);
+      console.log(updatedIdea);
+    }
+  };
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -153,7 +316,7 @@ export const IdeaTemplate = () => {
   let files = [];
 
   useEffect(() => {
-    console.log("Loaded Idea.js");
+    // console.log("Loaded Idea.js");
     submitMultipleImages();
   }, [functionCompletionCount]);
 
@@ -190,17 +353,14 @@ export const IdeaTemplate = () => {
         files = tempIdeaSpace.images;
         tempIdeaSpace.images = await submitMultipleImages(files);
       }
-      if (tempIdeaSpace.boards.length > 0) {
-        files = tempIdeaSpace.boards;
-        tempIdeaSpace.boards = await submitMultipleImages(files);
+      if (tempIdeaSpace.board.length > 0) {
+        files = tempIdeaSpace.board;
+        tempIdeaSpace.board = await submitMultipleImages(files);
       }
       if (tempIdeaSpace.graphs.length > 0) {
         files = tempIdeaSpace.graphs;
         tempIdeaSpace.graphs = await submitMultipleImages(files);
       }
-      // console.log(tempIdeaSpace.boards);
-      // console.log(tempIdeaSpace.graphs);
-      // console.log(tempIdeaSpace.images);
       setIdea((prevIdea) => ({
         ...prevIdea,
         idea_space: [...prevIdea.idea_space, tempIdeaSpace],
@@ -209,7 +369,7 @@ export const IdeaTemplate = () => {
         text: "",
         links: [],
         images: [],
-        boards: [],
+        board: [],
         graphs: [],
       });
       setFunctionCompletionCount((prevCount) => prevCount + 1);
@@ -252,11 +412,11 @@ export const IdeaTemplate = () => {
   const handleBoardInputChange = (e, index) => {
     const file = e.target.files[0];
     setTempIdeaSpace((prevTemp) => {
-      const updatedBoards = [...prevTemp.boards];
+      const updatedBoards = [...prevTemp.board];
       updatedBoards[index] = file;
       return {
         ...prevTemp,
-        boards: updatedBoards,
+        board: updatedBoards,
       };
     });
   };
@@ -297,11 +457,11 @@ export const IdeaTemplate = () => {
 
   const handleRemoveBoard = (index) => {
     setTempIdeaSpace((prevTemp) => {
-      const updatedBoards = [...prevTemp.boards];
+      const updatedBoards = [...prevTemp.board];
       updatedBoards.splice(index, 1);
       return {
         ...prevTemp,
-        boards: updatedBoards,
+        board: updatedBoards,
       };
     });
   };
@@ -335,9 +495,9 @@ export const IdeaTemplate = () => {
           tempInspiration.images
         );
       }
-      if (tempInspiration.boards.length > 0) {
-        tempInspiration.boards = await submitMultipleImages(
-          tempInspiration.boards
+      if (tempInspiration.board.length > 0) {
+        tempInspiration.board = await submitMultipleImages(
+          tempInspiration.board
         );
       }
       if (tempInspiration.graphs.length > 0) {
@@ -345,7 +505,7 @@ export const IdeaTemplate = () => {
           tempInspiration.graphs
         );
       }
-      // console.log(tempInspiration.boards);
+      // console.log(tempInspiration.board);
       // console.log(tempInspiration.graphs);
       // console.log(tempInspiration.images);
 
@@ -357,7 +517,7 @@ export const IdeaTemplate = () => {
         text: "",
         links: [],
         images: [],
-        boards: [],
+        board: [],
         graphs: [],
       });
       setFunctionCompletionCount((prevCount) => prevCount + 1);
@@ -390,7 +550,6 @@ export const IdeaTemplate = () => {
     setTempInspiration((prevTemp) => {
       const updatedImages = [...prevTemp.images];
       updatedImages[index] = file;
-      // console.log(file);
       return {
         ...prevTemp,
         images: updatedImages,
@@ -401,11 +560,11 @@ export const IdeaTemplate = () => {
   const handleBoardInputChangeInspiration = (e, index) => {
     const file = e.target.files[0];
     setTempInspiration((prevTemp) => {
-      const updatedBoards = [...prevTemp.boards];
+      const updatedBoards = [...prevTemp.board];
       updatedBoards[index] = file;
       return {
         ...prevTemp,
-        boards: updatedBoards,
+        board: updatedBoards,
       };
     });
   };
@@ -447,11 +606,11 @@ export const IdeaTemplate = () => {
 
   const handleRemoveBoardInspiration = (index) => {
     setTempInspiration((prevTemp) => {
-      const updatedBoards = [...prevTemp.boards];
+      const updatedBoards = [...prevTemp.board];
       updatedBoards.splice(index, 1);
       return {
         ...prevTemp,
-        boards: updatedBoards,
+        board: updatedBoards,
       };
     });
   };
@@ -467,12 +626,18 @@ export const IdeaTemplate = () => {
     });
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
+    console.log(idea)
     e.preventDefault();
 
-    console.log(idea);
-    const response = await createNewIdea(linkId, boardId, chartId, idea);
-    console.log(response);
+    if(ideaId===undefined){
+      const response = await createNewIdea(linkId, boardId, chartId, idea);
+      navigate(`/${linkId}/board/${boardId}/charts/${chartId}`);
+    }
+    else{
+      const response2 = await updateIdea(linkId,boardId,chartId,ideaId,idea)
+      navigate(`/${linkId}/board/${boardId}/charts/${chartId}`); 
+    }
 
     setIdea({
       topic: "",
@@ -507,7 +672,8 @@ export const IdeaTemplate = () => {
   };
 
   return (
-    <div>
+    <>
+      <div>
       {/* */}
       <div className="container-fluid mainBodyOfTemplete">
         <div className="row">
@@ -546,12 +712,26 @@ export const IdeaTemplate = () => {
               <h3>Idea Space</h3>
               <div className="">
                 {idea.idea_space.map((point, index) => (
-                  <div key={index}>
-                    <p>Text: {point.text}</p>
+                  <div key={index} className="">
+                    <div className="thisisNamanSinghHere">
+                      {point.text && point.text.length > 0 && (
+                        <div className="preStoredIdeaIdeaTemplete  mt-4 mx-2">
+                          <p className="textforStoredText savedPoint">
+                            {point.text}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+
                     {/*  ******************/}
+
                     {point.images && point.images.length > 0 && (
-                      <div>
-                        <h4>Images:</h4>
+                      <div className="titleGraphIdeaTemplete mt-3">
+                        <h4 className="titleLeftIdeaTemplete">Images</h4>
+                      </div>
+                    )}
+                    {point.images && point.images.length > 0 && (
+                      <div className="PreStoredGraphIdeaTemplete">
                         {point.images.map((image, index) => (
                           <img
                             key={index}
@@ -559,33 +739,45 @@ export const IdeaTemplate = () => {
                             alt={`Image ${index + 1}`}
                             style={{
                               marginRight: "10px",
-                              width: "100px",
-                              height: "100px",
-                            }} // Set width and height as needed
+                              width: "7vw",
+                              height: "4vh",
+                            }}
+                            className="imgOfBoard"
                           />
                         ))}
                       </div>
                     )}
-                    {point.freeboard && point.freeboard.length > 0 && (
-                      <div>
-                        <h4>Freeboard:</h4>
-                        {point.freeboard.map((link, index) => (
+
+                    {point.board && point.board.length > 0 && (
+                      <div className="titleGraphIdeaTemplete mt-3">
+                        <h4 className="titleLeftIdeaTemplete">Boards</h4>
+                      </div>
+                    )}
+                    {point.board && point.board.length > 0 && (
+                      <div className="PreStoredGraphIdeaTemplete">
+                        {point.board.map((link, index) => (
                           <img
                             key={index}
                             src={link}
                             alt={`Board ${index + 1}`}
                             style={{
                               marginRight: "10px",
-                              width: "100px",
-                              height: "100px",
+                              width: "7vw",
+                              height: "4vh",
+                              transform: "translateY(-17%) !important",
                             }}
+                            className="imgOfBoard"
                           />
                         ))}
                       </div>
                     )}
                     {point.graphs && point.graphs.length > 0 && (
-                      <div>
-                        <h4>Graphs:</h4>
+                      <div className="titleGraphIdeaTemplete mt-3">
+                        <h4 className="titleLeftIdeaTemplete">Graphs</h4>
+                      </div>
+                    )}
+                    {point.graphs && point.graphs.length > 0 && (
+                      <div className="PreStoredGraphIdeaTemplete">
                         {point.graphs.map((graph, index) => (
                           <img
                             key={index}
@@ -593,26 +785,33 @@ export const IdeaTemplate = () => {
                             alt={`Graph ${index + 1}`}
                             style={{
                               marginRight: "10px",
-                              width: "100px",
-                              height: "100px",
+                              width: "7vw",
+                              height: "4vh",
                             }}
+                            className="imgOfBoard"
                           />
                         ))}
                       </div>
                     )}
                     {point.links && point.links.length > 0 && (
-                      <div>
-                        <h4>Links:</h4>
+                      <div className="titleGraphIdeaTemplete mt-3">
+                        <h4 className="titleLeftIdeaTemplete">links</h4>
+                      </div>
+                    )}
+                    {point.links && point.links.length > 0 && (
+                      <div className="">
                         {point.links.map((link, index) => (
-                          <a
-                            key={index}
-                            href={link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{ marginRight: "10px" }}
-                          >
-                            Link {index + 1}
-                          </a>
+                          <div className="linksleft imgOfBoard">
+                            <a
+                              key={index}
+                              href={link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{ marginRight: "10px", cursor: "pointer" }}
+                            >
+                              Link {index + 1}
+                            </a>
+                          </div>
                         ))}
                       </div>
                     )}
@@ -636,16 +835,17 @@ export const IdeaTemplate = () => {
               <div>
                 <div className="imageContainerofIdeaSpace">
                   {tempIdeaSpace.images.map((image, index) => (
-                    <div key={index}>
+                    <div key={index} className="mt-2">
                       <input
                         type="file"
                         onChange={(e) => handleImageInputChange(e, index)}
+                        className="fileInputIdeaTemplete"
                       />
-                      <div className="removeButton">
+                      <span className="removeButton">
                         <button onClick={() => handleRemoveImage(index)}>
-                          Remove
+                          <FontAwesomeIcon icon={faTrash} />
                         </button>
-                      </div>
+                      </span>
                     </div>
                   ))}
                   <button
@@ -655,8 +855,9 @@ export const IdeaTemplate = () => {
                         images: [...prevTemp.images, ""],
                       }))
                     }
+                    className="mt-1"
                   >
-                    Add Image
+                    <FontAwesomeIcon icon={faImage} />
                   </button>
                 </div>
                 <div className="linkContainerofIdeaSpace mt-2">
@@ -666,12 +867,13 @@ export const IdeaTemplate = () => {
                         type="text"
                         value={link}
                         onChange={(e) => handleLinkInputChange(e, index)}
+                        className="fileInputIdeaTemplete"
                       />
-                      <div className="removeButton mt-2">
+                      <span className="removeButton mt-2">
                         <button onClick={() => handleRemoveLink(index)}>
-                          Remove
+                          <FontAwesomeIcon icon={faTrash} />
                         </button>
-                      </div>
+                      </span>
                     </div>
                   ))}
                   <button
@@ -682,33 +884,34 @@ export const IdeaTemplate = () => {
                       }))
                     }
                   >
-                    Add Link
+                    <FontAwesomeIcon icon={faLink} />
                   </button>
                 </div>
 
-                <div className="boardsContainerofIdeaSpace mt-2">
-                  {tempIdeaSpace.boards.map((board, index) => (
+                <div className="boardContainerofIdeaSpace mt-2">
+                  {tempIdeaSpace.board.map((board, index) => (
                     <div key={index}>
                       <input
                         type="file"
                         onChange={(e) => handleBoardInputChange(e, index)}
+                        className="fileInputIdeaTemplete"
                       />
-                      <div className="removeButton">
+                      <span className="removeButton">
                         <button onClick={() => handleRemoveBoard(index)}>
-                          Remove
+                          <FontAwesomeIcon icon={faTrash} />
                         </button>
-                      </div>
+                      </span>
                     </div>
                   ))}
                   <button
                     onClick={() =>
                       setTempIdeaSpace((prevTemp) => ({
                         ...prevTemp,
-                        boards: [...prevTemp.boards, ""],
+                        board: [...prevTemp.board, ""],
                       }))
                     }
                   >
-                    Add Board
+                    <FontAwesomeIcon icon={faChessBoard} />
                   </button>
                 </div>
                 <div className="GraphContainerofIdeaSpace mt-2">
@@ -717,12 +920,13 @@ export const IdeaTemplate = () => {
                       <input
                         type="file"
                         onChange={(e) => handleGraphInputChange(e, index)}
+                        className="fileInputIdeaTemplete"
                       />
-                      <div className="removeButton mt-2">
+                      <span className="removeButton mt-2">
                         <button onClick={() => handleRemoveGraph(index)}>
-                          Remove
+                          <FontAwesomeIcon icon={faTrash} />
                         </button>
-                      </div>
+                      </span>
                     </div>
                   ))}
                   <button
@@ -733,7 +937,7 @@ export const IdeaTemplate = () => {
                       }))
                     }
                   >
-                    Add Graph
+                    <FontAwesomeIcon icon={faDiagramProject} />
                   </button>
                 </div>
                 <div className="buttonToAddIdeaPoint mt-2">
@@ -749,11 +953,13 @@ export const IdeaTemplate = () => {
               <div className="">
                 {idea.inspiration.map((point, index) => (
                   <div key={index}>
-                    <h3>Inspiration - point {index + 1}</h3>
-                    <p>Text: {point.text}</p>
                     {point.images && point.images.length > 0 && (
-                      <div>
-                        <h4>Images:</h4>
+                      <div className="titleGraphIdeaTemplete mt-3">
+                        <h4 className="titleLeftIdeaTemplete">Images</h4>
+                      </div>
+                    )}
+                    {point.images && point.images.length > 0 && (
+                      <div className="PreStoredGraphIdeaTemplete">
                         {point.images.map((image, index) => (
                           <img
                             key={index}
@@ -761,32 +967,45 @@ export const IdeaTemplate = () => {
                             alt={`Image ${index + 1}`}
                             style={{
                               marginRight: "10px",
-                              width: "100px",
-                              height: "100px",
+                              width: "7vw",
+                              height: "4vh",
                             }}
+                            className="imgOfBoard"
                           />
                         ))}
                       </div>
                     )}
-                    {point.freeboard && point.freeboard.length > 0 && (
-                      <div>
-                        <h4>Freeboard:</h4>
-                        {point.freeboard.map((board, index) => (
+
+                    {point.board && point.board.length > 0 && (
+                      <div className="titleGraphIdeaTemplete mt-3">
+                        <h4 className="titleLeftIdeaTemplete">Boards</h4>
+                      </div>
+                    )}
+                    {point.board && point.board.length > 0 && (
+                      <div className="PreStoredGraphIdeaTemplete">
+                        {point.board.map((board, index) => (
                           <img
                             key={index}
                             src={board}
                             alt={`Board ${index + 1}`}
                             style={{
                               marginRight: "10px",
-                              width: "100px",
-                              height: "100px",
+                              width: "7vw",
+                              height: "4vh",
+                              transform: "translateY(-17%) !important",
                             }}
+                            className="imgOfBoard"
                           />
                         ))}
                       </div>
                     )}
                     {point.graphs && point.graphs.length > 0 && (
-                      <div>
+                      <div className="titleGraphIdeaTemplete mt-3">
+                        <h4 className="titleLeftIdeaTemplete">Graphs</h4>
+                      </div>
+                    )}
+                    {point.graphs && point.graphs.length > 0 && (
+                      <div className="PreStoredGraphIdeaTemplete">
                         <h4>Graphs:</h4>
                         {point.graphs.map((graph, index) => (
                           <img
@@ -795,11 +1014,17 @@ export const IdeaTemplate = () => {
                             alt={`Graph ${index + 1}`}
                             style={{
                               marginRight: "10px",
-                              width: "100px",
-                              height: "100px",
+                              width: "7vw",
+                              height: "4vh",
                             }}
+                            className="imgOfBoard"
                           />
                         ))}
+                      </div>
+                    )}
+                    {point.links && point.links.length > 0 && (
+                      <div className="titleGraphIdeaTemplete mt-3">
+                        <h4 className="titleLeftIdeaTemplete">links</h4>
                       </div>
                     )}
                     {point.links && point.links.length > 0 && (
@@ -811,7 +1036,7 @@ export const IdeaTemplate = () => {
                             href={link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            style={{ marginRight: "10px" }}
+                            style={{ marginRight: "10px", cursor: "pointer" }}
                           >
                             Link {index + 1}
                           </a>
@@ -821,7 +1046,7 @@ export const IdeaTemplate = () => {
                   </div>
                 ))}
               </div>
-              <div className="ideaSpaceOfTemplete mx-1 mt-3">
+              <div className="ideaSpaceOfTemplete mx-1 mt-1">
                 <textarea
                   type="text"
                   value={tempInspiration.text}
@@ -845,12 +1070,13 @@ export const IdeaTemplate = () => {
                         onChange={(e) =>
                           handleLinkInputChangeInspiration(e, index)
                         }
+                        className="fileInputIdeaTemplete"
                       />
                       <button
                         className="mt-2"
                         onClick={() => handleRemoveLinkInspiration(index)}
                       >
-                        Remove
+                        <FontAwesomeIcon icon={faTrash} />
                       </button>
                     </div>
                   ))}
@@ -863,7 +1089,7 @@ export const IdeaTemplate = () => {
                       }))
                     }
                   >
-                    Add Link
+                    <FontAwesomeIcon icon={faLink} />
                   </button>
                 </div>
                 <div>
@@ -874,12 +1100,13 @@ export const IdeaTemplate = () => {
                         onChange={(e) =>
                           handleImageInputChangeInspiration(e, index)
                         }
+                        className="fileInputIdeaTemplete"
                       />
                       <button
                         className="mt-2"
                         onClick={() => handleRemoveImageInspiration(index)}
                       >
-                        Remove
+                        <FontAwesomeIcon icon={faTrash} />
                       </button>
                     </div>
                   ))}
@@ -892,11 +1119,11 @@ export const IdeaTemplate = () => {
                       }))
                     }
                   >
-                    Add Image
+                    <FontAwesomeIcon icon={faImage} />
                   </button>
                 </div>
                 <div>
-                  {tempInspiration.boards.map((board, index) => (
+                  {tempInspiration.board.map((board, index) => (
                     <div key={index}>
                       <input
                         type="file"
@@ -908,7 +1135,7 @@ export const IdeaTemplate = () => {
                         className="mt-2"
                         onClick={() => handleRemoveBoardInspiration(index)}
                       >
-                        Remove
+                        <FontAwesomeIcon icon={faTrash} />
                       </button>
                     </div>
                   ))}
@@ -917,11 +1144,11 @@ export const IdeaTemplate = () => {
                     onClick={() =>
                       setTempInspiration((prevTemp) => ({
                         ...prevTemp,
-                        boards: [...prevTemp.boards, ""],
+                        board: [...prevTemp.board, ""],
                       }))
                     }
                   >
-                    Add Board
+                    <FontAwesomeIcon icon={faChessBoard} />
                   </button>
                 </div>
                 <div>
@@ -937,7 +1164,7 @@ export const IdeaTemplate = () => {
                         className="mt-2"
                         onClick={() => handleRemoveGraphInspiration(index)}
                       >
-                        Remove
+                        <FontAwesomeIcon icon={faTrash} />
                       </button>
                     </div>
                   ))}
@@ -950,7 +1177,7 @@ export const IdeaTemplate = () => {
                       }))
                     }
                   >
-                    Add Graph
+                    <FontAwesomeIcon icon={faDiagramProject} />
                   </button>
                 </div>
               </div>
@@ -959,16 +1186,19 @@ export const IdeaTemplate = () => {
             <div className="row mt-4 part2OfTemplete">
               <h3>Previous Nodes</h3>
               {idea.prevNodes.map((point, index) => (
-                <div key={index}>
-                  <p>{point}</p>
-                  <button onClick={() => handleRemovePrevNodesPoint(index)}>
-                    Remove
-                  </button>
-                </div>
-              ))}
+                  <div
+                    key={index}
+                    className="tagsContainerForGuidingPoint mt-2"
+                  >
+                    <p className="savedPoints">{point}</p>
+                    <button onClick={() => handleRemovePrevNodesPoint(index)}>
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button>
+                  </div>
+                ))}
               <div>
                 <input
-                  className="inputForPreviousNodes"
+                  className="inputForPreviousNodes mt-3"
                   type="text"
                   value={tempPrevNodes}
                   onChange={handlePrevNodesChange}
@@ -1086,6 +1316,7 @@ export const IdeaTemplate = () => {
                     type="text"
                     name="time"
                     value={idea.cons.time}
+                    placeholder="hours"
                     onChange={handleConsChange}
                   />
                 </label>
@@ -1095,16 +1326,53 @@ export const IdeaTemplate = () => {
                   <input
                     type="text"
                     name="budget"
+                    placeholder=" INR"
                     value={idea.cons.budget}
                     onChange={handleConsChange}
                   />
                 </label>
               </div>
             </div>
-            <button onClick={handleSubmit}>Submit</button>
+            <div className="row mt-4">
+              <div className="col-5"></div>
+              <div className="col-7">
+                <button onClick={handleSubmit}>Submit</button>
+                </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
+      <div className="graph-container">
+        <Graph
+          id="graph-id"
+          data={graphData}
+          onClickNode={(nodeId) => onClickNode(nodeId)}
+          config={{
+            directed: true,
+            node: {
+              symbolType: "circle",
+              size: 2000,
+              labelOffset: 2,
+              fontSize: 16,
+            },
+            link: {
+              highlightColor: "lightblue",
+              color: "#333", // Darker color for the links
+              strokeWidth: 2, 
+            },
+            d3: {
+              gravity: -400, // Increase this value to increase the distance between nodes
+            },
+          }}
+          onEngine={(graph) => {
+            const layout = dagre.graphlib.layout();
+            layout(graph);
+          }}
+        />
+
+        {/* Render the preview component if a node is clicked */}
+      </div>
+    </>
   );
 };
